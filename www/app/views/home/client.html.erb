@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>irc.gimite.net</title>
+<link href="qi2.css" rel="stylesheet" type="text/css" >
+<script type="text/javascript">MochiKit = {__export__: false};</script>
+<script type="text/javascript" src="j/MochiKit.js"></script>
+<script type="text/javascript">
+	$ = MochiKit.DOM.$;
+	logDebug = MochiKit.Logging.logDebug;
+	logInfo  = MochiKit.Logging.log;
+	logWarning = MochiKit.Logging.logWarning;
+	logError = MochiKit.Logging.logError;
+	logFatal = MochiKit.Logging.logFatal;
+</script>
+<script type="text/javascript" src="j/AC_RunActiveContent.js"></script>
+<script type="text/javascript" src="j/UAIdentifier.js"></script>
+
+<script type="text/javascript" src="j/LayoutManager.js"></script>
+<script type="text/javascript" src="j/ListBox.js"></script>
+<script type="text/javascript" src="j/LogBuffer.js"></script>
+<script type="text/javascript" src="j/SortableManager.js"></script>
+<!-- ここから下のスクリプトはQuickIRC2用のもの -->
+
+<script type="text/javascript" src="j/QI2Flash.js" ></script>
+<script type="text/javascript" src="j/QI2Util.js"></script>
+<script type="text/javascript" src="j/QI2BufferTree.js"></script>
+
+<script type="text/javascript" src="j/QI2MessageFormat.js"></script>
+<script type="text/javascript" src="j/QI2IRCMessage.js"></script>
+<script type="text/javascript" src="j/QI2BaseActions.js"></script>
+<script type="text/javascript" src="SiteSetting.js"></script>
+<script type="text/javascript" src="j/QI2PageSetup.js"></script>
+
+</head>
+<body onload="PageSetup();">
+
+<!-- ログバッファヘッダ -->
+<div id="BufferInfo">
+	<div id="BufferTitle">
+		<a href="/" target="_blank">irc.gimite.net</a> / <span id="BufferName"></span>
+	</div>
+	<div id="BufferTopic"></div>
+</div>
+<!-- ログバッファコンテナ -->
+<div id="BufferContainer"></div>
+
+<!-- 発言入力部 -->
+<textarea id="taInput" wrap=off></textarea>
+<!-- その他入力補助 -->
+<div id="InputPane">
+	<table class="InputPaneTable">
+	<tr>
+		<td nowrap style="vertical-align:top">↑グレーの部分に発言を入力してEnterキーを押してください。</td>
+		<td nowrap ALIGN="right">
+			<input type="button" class="btnSend" value="発言"     onClick="endInput(1)">
+			<input type="button" class="btnSend" value="Notice"   onClick="endInput(2)">
+			<input type="button" class="btnSend" value="Action"   onClick="endInput(3)">
+			<input type="button" class="btnSend" value="トピックを設定"
+				onClick="endInput(4)">
+			<!-- <input type="button" class="btnSend" value="全CH"     onClick="endInput(5)"> -->
+			<input type="button" class="btnSend" value="過去ログ" onClick="actArchive()">
+			<input type="button" class="btnSend" value="過去ログを取って公開"
+				onClick="actInviteLogger()">
+		</td>
+	</tr>
+	</table>
+</div>
+
+<!-- 全ログヘッダ -->
+<div id="AllLogHeader">
+<div id="AllLogCaption">全体ログ</div>
+</div>
+<!-- 全ログコンテナ -->
+<div id="AllLogContainer"></div>
+<!-- 全ログフッタ -->
+<div id="AllLogFooter">
+	<div id="version">
+		<A href="#" onclick="actConnSetting();return false;">ニックネーム変更</a> 
+		<!-- <A href="#" onclick="actSelectChanneList();return false;">チャンネル一覧</a>  -->
+		<A href="#" onclick="actAppSetting();return false;">文字サイズ変更,サウンド設定</a> 
+		　//　
+		Based on <A target="_blank" href="http://irc.juggler.jp/qi2/doc/qi2readme.html">QuickIRC2</a> version 2.0.0
+		<script type="text/javascript">
+			for(var i=0;i<10;++i){
+				var name = "conn"+i;
+				AC_FL_RunContent(
+					'codebase', 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0',
+					'pluginspage', 'http://www.macromedia.com/go/getflashplayer',
+					'id', name,   // オブジェクトインスタンスのid
+					'name', name, // オブジェクトインスタンスのname
+					'src', 'QI2Flash',   // Flashファイルから 拡張子.swfを取り除いたもの
+					'movie', 'QI2Flash', // Flashファイルから 拡張子.swfを取り除いたもの
+					'width', '1',
+					'height', '1',
+					'quality', 'high',
+					'align', 'middle',
+					'play', 'true',
+					'loop', 'true',
+					'scale', 'exactfit',
+					'wmode', 'transparent',
+					'devicefont', 'false',
+					'bgcolor', '#333333',
+					'menu', 'true',
+					'allowFullScreen', 'false',
+					'salign', 'lt',
+					'allowScriptAccess','sameDomain'
+					,'FlashVars',("myname="+name)
+					,'allowNetworking','all'
+				); //end AC code
+			}
+		</script>
+	</div>
+</div>
+
+<!-- 参加者一覧 -->
+<div class="lmlistheader" id="MemberListHeader" ><div class="listheaderCaption">参加者一覧</div></div>
+<div id="MemberListContainer"></div>
+<div class="lmlistfooter" id="MemberListFooter">
+	<table class="InputPaneTable">
+	<tr>
+		<td nowrap style="text-align:right;width:auto;">
+			<input type="button" class="btnSend" value="無視" onclick="actIngore()">
+			<input type="button" class="btnSend" value="内緒話" onclick="actPrivBuffer()">
+		</td>
+	</tr>
+	</table>
+</div>
+
+<!-- バッファ一覧 -->
+<div class="lmlistheader" id="BufferListHeader"><div  class="listheaderCaption">発言先の選択</div></div>
+<div id="BufferListContainer"><div class="listbox" id="bufferlist"></div></div>
+<div class="lmlistfooter" id="BufferListFooter">
+</div>
+
+<!-- アプリケーション設定 -->
+<div id="ApplicationSettings" class="Settings" style="display:none;">
+<form action="" onsubmit="return false;">
+<H3>入退出メッセージの表示</H3>
+<p>
+<input type="checkbox" name="MessageOnOff_QUIT" value="QUIT" onClick="AppNode.setMessageOnOff(event)" checked>切断　
+<input type="checkbox" name="MessageOnOff_JOIN" value="JOIN" onClick="AppNode.setMessageOnOff(event)" checked>参加　
+<input type="checkbox" name="MessageOnOff_NICK" value="NICK" onClick="AppNode.setMessageOnOff(event)" checked>改名　
+<input type="checkbox" name="MessageOnOff_MODE" value="MODE" onClick="AppNode.setMessageOnOff(event)" checked>MODE　
+</p>
+<H3>文字のサイズ</H3>
+
+<p>ログメッセージ<br>
+<input type="radio" name="FontSize_LogRow" value="9pt"  onClick="AppNode.changeStyleSheet('.logrow','fontSize','9pt')"  >9pt
+<input type="radio" name="FontSize_LogRow" value="12pt" onClick="AppNode.changeStyleSheet('.logrow','fontSize','12pt')" checked>12pt
+<input type="radio" name="FontSize_LogRow" value="16pt" onClick="AppNode.changeStyleSheet('.logrow','fontSize','16pt')" >16pt
+</p>
+
+<p>時刻とサーバ名<br>
+<input type="radio" name="FontSize_TimeSpan" value="57%"  onClick="AppNode.changeStyleSheet('.logparams','fontSize','57%')">57%
+<input type="radio" name="FontSize_TimeSpan" value="75%"  onClick="AppNode.changeStyleSheet('.logparams','fontSize','75%')" checked>75%
+<input type="radio" name="FontSize_TimeSpan" value="100%" onClick="AppNode.changeStyleSheet('.logparams','fontSize','100%')">100%
+</p>
+
+<p class="sound_config">サウンド<br>
+</p>
+
+<p>詳細<br>
+<div><input type="checkbox" name="AutoPrivSelect" value="57%"  onClick="AppNode.saveSettings()" checked>新しい人から内緒話がきたら発言先を合わせる</div>
+</p>
+
+
+</form>
+</div>
+
+<!-- 接続設定 -->
+<div id="ConnectionSettings" class="Settings" style="display:none;">
+<form action="" onsubmit="getSelectedConnNode().btnSearch_Clicked();return false;">
+
+
+<table border="1">
+<Tr><td>接続先</td><td><select id="serverlist"><option value="#random">ランダム</option></select></td></tr>
+<Tr><td>接続パスワード</td><td><input type="text" name="conn_passwd" value=""><small>通常はカラのままでOK</small></td></tr>
+<Tr><td>ニックネーム</td><td><input type="text" name="nick" value=""><input type="button" value="変更" onclick="findNodeFromEvent(event).changeNick()"></td></tr>
+<Tr><td>チャンネル追加</td><td><input type="text" value="" name="channelName"><input type="button" value="追加" onclick="findNodeFromEvent(event).addChannelUI()"></td></tr>
+<Tr><td>オプション</td><td>
+	<div style="font-size:75%">
+	<div><input type="checkbox" value="1" name="autoConnect" checked >起動時に接続開始</div>
+	<div><input type="checkbox" value="1" name="showFlashLog" >Flashのログを表示する</div>
+	<div><input type="checkbox" value="1" name="showRawLog"   >生の通信内容を表示する</div>
+	</div>
+</td></tr>
+</table>
+<div style="margin: 8px 0">
+<input type="button" value="接続" onclick="actConnStart(findNodeFromEvent(event))"> 
+<input type="button" value="切断" onclick="actConnStop(findNodeFromEvent(event))">
+</div>
+<hr style="margin:8px 0">
+
+<div style="display: none;">
+<div>
+<H3 class="ChannelListHeader">チャンネル一覧 <input class="button" type="button" value="更新" onclick="getSelectedConnNode().reloadChannelList()"></h3>
+<div class="serverinfo">
+更新時刻:<span class="lastupdate"></span>
+</div>
+<div class="serverinfo" id="counts1"></div>
+<div class="serverinfo" id="counts2"></div>
+<br>
+<div class="serverinfo">
+	<input class="textinput" type="text" name="SearchText" value="">
+	<input class="button" type="button" value="検索" onclick="getSelectedConnNode().btnSearch_Clicked();return false;">
+	<input class="button" type="button" value="中止" onclick="getSelectedConnNode().btnSearch_Clicked(true);return false;">
+</div>
+<br>
+</div>
+<table id="sortable_table" class="clisttable">
+<thead><tr>
+	<th class="clistnumber" mochi:format="number">流量<span class="arrow"></span></th>
+	<th class="clistnumber" mochi:format="number">人数<span class="arrow"></span></th>
+	<th class="clistname" mochi:format="istr">チャンネル<span class="arrow"></span><div class="clisttopic">トピック</div></th>
+</tr></thead>
+<tbody></tbody>
+</table>
+</div>
+
+</form>
+<!--<div style="height:1024px;">&nbsp;</div>-->
+</div>
+
+<div id="NodeMenu_App">
+</div>
+<div id="NodeMenu_Conn">
+	<input type="button" class="btnSend" value="接続" onclick="actConnStart(getSelectedConnNode())">
+	<input type="button" class="btnSend" value="切断" onclick="actConnStop(getSelectedConnNode())">
+</div>
+<div id="NodeMenu_Channel">
+	<input type="button" class="btnSend" value="参加" onclick="actChannelJoin(getSelectedNode())">
+	<input type="button" class="btnSend" value="退出" onclick="actChannelPart(getSelectedNode())">
+	<input type="button" class="btnSend" value="削除" onclick="actDeleteBuffer(getSelectedNode())">
+</div>
+<div id="NodeMenu_Priv">
+	<input type="button" class="btnSend" value="無視" onclick="actIngore()">
+	<input type="button" class="btnSend" value="削除" onclick="actDeleteBuffer(getSelectedNode())">
+</div>
+
+</body>
+</html>

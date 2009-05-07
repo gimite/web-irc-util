@@ -1,0 +1,387 @@
+/* ページ全体 ************************/
+
+html,body{
+	margin:0;
+	padding:0;
+	height: 100%;
+	overflow:hidden;
+	background-color: white;
+	color: black;
+	line-height:1;
+	/* font-family: 'ＭＳ Ｐゴシック NB','MS PGothic'; */
+	//background-image: url(i/simasima.gif);
+	background-color: #e0e0e0;
+}
+textarea{
+	/* font-family: 'ＭＳ ゴシック NB','MS Gothic'; */
+}
+input{
+	/* font-family: 'ＭＳ Ｐゴシック NB','MS PGothic'; */
+}
+form{ margin:0; padding:0; }
+p{ margin:0; padding:0.5em 0; }
+
+A{ color:#000;}
+A:visited{ color:#666;}
+
+.invisible { display: none; }
+.margin{}
+.box{ background-color: white; }
+
+img.px1{
+	width:1px;
+	height:1px;
+	border:none;
+	padding:0;
+	margin:0;
+}
+
+/* リストボックス *********************/
+
+.lmlistheader,.lmlistfooter{
+	position: absolute;
+	z-index:10;
+	border: none;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	line-height:1;
+	margin:0;
+	padding:0;
+	vertical-align: middle;
+	height:17px;
+	width:160px;
+}
+.lmlistheader{
+	font-weight:bold;
+	text-align: center; 
+	color: #444;
+}
+.lmlistfooter{
+	padding: 0;
+	text-align:right;
+	font-size: 75%;
+}
+
+.listheaderCaption {
+	padding: 8px 4px 5px 4px;
+	letter-spacing:0;
+	//border-bottom: 1px dashed brown;
+}
+
+
+
+.listbox{
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	width:auto;
+	height:100%;
+	overflow: auto;
+	vertical-align:top;
+	margin: 0;
+	border: none;
+	padding:3px;
+	font-size: 75%;
+}
+
+
+div.bufferrow_off,div.bufferrow_on,div.memberrow_off,div.memberrow_on{
+	vertical-align:baseline;
+	border-bottom: 1px solid #ddd;
+	line-height:1;
+	cursor: pointer;
+}
+div.memberrow_on,div.bufferrow_on{
+	background-color: #FCE;
+	color:#000;
+}
+.listname{
+	vertical-align:baseline;
+	line-height:1;
+	overflow:hidden;
+}
+.listicon{
+	vertical-align:bottom;
+	padding: 0 2px 0 0;
+}
+
+.listindent8{
+	padding: 0 8px 0 0;
+}
+.listindent16{
+	padding: 0 16px 0 0;
+}
+
+#MemberListContainer,#BufferListContainer,#BufferContainer,#AllLogContainer{
+	position: absolute;
+	z-index:10;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	margin:0;
+	padding:0;
+}
+
+#taInput{
+	display:block;
+	position: absolute;
+	z-index:10;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	overflow:auto;
+	margin:0;
+	padding:0;
+	background-color: #EFEFEF;
+	border: 1px solid black ;
+	font-size: 12pt;
+	line-height: 1.2;
+}
+/* チャンネルバッファコンテナ *****************/
+
+#BufferInfo {
+	position: absolute;
+	z-index:10;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	color: #444;
+	margin:0;
+	border: none;
+	padding: 8px 4px 5px 4px;
+	letter-spacing:0;
+	//border-bottom: 1px dashed brown;
+}
+#BufferTitle {
+	font-weight:bold;
+	font-size:150%;
+	padding: 0 16px;
+	text-align:center;
+}
+#BufferTopic {
+	font-size:75%;
+	padding:3px 8px;
+	text-align:center;
+}
+
+#InputPane{
+	position: absolute;
+	z-index:10;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	padding:0;
+	margin:0;
+	border: none;
+}
+.InputPaneTable{
+	margin:0;
+	padding:0;
+	border:none;
+	border-collapse: collapse;
+	width:100%;
+}
+.InputPaneTable td{
+	margin:0;
+	padding:0;
+	font-size: 75%;
+	color: #444;
+}
+.btnSend{
+	margin:0;
+	padding:0;
+	vertical-align:bottom;
+	border: 1px solid black;
+	background-color:#f8f8f8;
+	color:black;
+	cursor: pointer;
+}
+
+/* ログバッファ *****************/
+/* 全ログ *****/
+
+#AllLogHeader {
+	position: absolute;
+	z-index:10;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	margin:0;
+	padding:0;
+	border: none;
+}
+#AllLogCaption{
+	font-weight:bold;
+	vertical-align:baseline;
+	color: #444;
+	text-align: center;
+
+	padding: 8px 4px 5px 4px;
+	letter-spacing:0;
+	//border-bottom: 1px dashed brown;
+}
+
+#AllLogFooter {
+	position: absolute;
+	z-index:10;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	margin:0;
+	padding:0;
+	border: none;
+	text-align:right;
+}
+#version{
+	font-size:75%;
+	font-weight:normal;
+	line-height:1;
+	vertical-align: top;
+	padding: 0;
+}
+
+
+.Buffer{
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	margin:0;
+	//padding:4px;
+	padding:0px;
+	border:none;
+	width:auto;
+	height:100%;
+	overflow: auto;
+	font-size:75%;
+	line-height:1.3;
+}
+
+.logtext {
+	margin:0; padding:0; 
+	color:#07760D;
+}
+
+.logrow{ margin:0; padding:0; word-break:break-all;}
+/* スクリプトでサイズを調整するのでlogrowはいじらないこと */
+
+/* スクリプトでサイズを調整するので以下略 */
+.logparams   {font-size:57%;font-family:Georgia; color:#666; }
+
+
+.logsender   {font-size:75%;;color:#08F; }
+.logbody     {font-size:75%;;color:#222; }
+.logsenderpre,.logsendersuf{color:#ccc; }
+
+.inviteA{ font-size:200%; color:#F80; }
+.inviteB{ font-size:200%; color:#F80; }
+.logparamx  {}
+.logparamm  { word-break:break-all; word-wrap: break-word;}
+.logparamy  {}
+
+.logparamf  {color:#406FFF; }
+.logparamfs {color:#406FFF; }
+.logparamfe {color:#888; font-size:57%;font-family:Georgia; }
+
+.logparamc  {color:#008000; }
+.logparamcs {color:#008000; }
+.logparamce {color:#888; font-size:57%;font-family:Georgia; }
+
+.logparamt  {color:#406FFF; }
+.logparamts {color:#406FFF; }
+.logparamte {color:#888; font-size:57%;font-family:Georgia; }
+
+.clisttable{
+	empty-cells: show;
+	border-collapse:collapse;
+	border: 1px solid #EFB586;
+}
+.clistname{
+	border: 1px solid #EFB586;
+	padding: 2px;
+	text-align:left;
+}
+.clisttopic{
+	font-size:75%;
+	padding: 2px 0 0 0;
+}
+.clistnumber{
+	border: 1px solid #EFB586;
+	padding: 2px;
+	text-align:center;
+}
+th.clistnumber,th.clistname{
+	background-color:#FFE4CF;
+}
+td.clistname A {
+	text-decoration:none; 
+	color:#008000;
+}
+
+/* 接続設定ダイアログ ************/
+
+.Settings{
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	margin:0;
+	padding:4px;
+	border:none;
+	width:auto;
+	height:100%;
+	overflow: auto;
+}
+
+.ConnParam {
+	margin:0;
+	padding:0;
+	border:none;
+	border-collapse: collapse;
+}
+.ConnParam td {
+	margin:0;
+	padding:1px;
+	border:1px solid black;
+	font-size:75%;
+}
+
+IMG.BGFrameTL,
+IMG.BGFrameTR,
+IMG.BGFrameTM,
+IMG.BGFrameML,
+IMG.BGFrameMM,
+IMG.BGFrameMR,
+IMG.BGFrameBL,
+IMG.BGFrameBR,
+IMG.BGFrameBM {
+	display: block;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	position: absolute;
+	margin:0;
+	padding:0;
+	border: none;
+	z-index: 0;
+}
+
+/*****************************************************/
+
+table.clisttable {
+	border-collapse: collapse;
+}
+
+table.clisttable thead th { 
+    text-align: left;
+    background-color: #FFE2BF;
+    font-weight: bold;
+    font-size: .9em;
+}
+table.clisttable thead th.over {
+    background-color: #ddeeff;
+    cursor: pointer;
+}
+table.clisttable thead th a {
+    text-decoration: none;
+    font-size: 1.0em;
+}
+
+table.clisttable tbody th {
+    font-weight: bold;
+}
+table.clisttable tbody td, table.clisttable tbody th {
+    border-bottom: 1px solid #FFE2BF;
+    background-color: #FFFFF0;
+}
+
+table.clisttable tbody tr.alternate td, table.clisttable tbody tr.alternate th { background-color: #fff; }
+

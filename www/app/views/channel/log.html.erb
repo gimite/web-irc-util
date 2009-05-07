@@ -1,0 +1,34 @@
+<h1>
+  <%= link_to("irc.gimite.net", "/") %> /
+  <%= link_to("\##{@channel}", @channel_url) %> /
+  <%=h @date.strftime("%Y/%m/%d") %>
+</h1>
+
+<p>
+  <%= link_to("« " + @prev_date.strftime("%Y/%m/%d"), @prev_date_url) %>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <% if @next_date_url %>
+    <%= link_to(@next_date.strftime("%Y/%m/%d") + " »", @next_date_url) %>
+  <% end %>
+</p>
+
+<p>
+<% for message in @log %>
+  <span class="time"><%=h message.time_str %></span>
+  <% if message.body %>
+    <span class="from"><%=h message.from_str %></span>
+    <span class="<%=h message.body_class %>"><%=h message.body %></span>
+  <% else %>
+    <span class="message"><%=h message.message %></span>
+  <% end %>
+  <br>
+<% end %>
+</p>
+
+<p>
+  <%= link_to("« " + @prev_date.strftime("%Y/%m/%d"), @prev_date_url) %>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <% if @next_date_url %>
+    <%= link_to(@next_date.strftime("%Y/%m/%d") + " »", @next_date_url) %>
+  <% end %>
+</p>

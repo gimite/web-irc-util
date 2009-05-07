@@ -1,0 +1,21 @@
+<h1>irc.gimite.net</h1>
+
+<p>irc.gimite.net はIRCサーバ + Web上で動くIRCクライアント (<a href="http://irc.juggler.jp/qi2/doc/qi2readme.html" target="_blank">QuickIRC2</a>) + 過去ログサーバ です。現在試験運用中です。運用を続けるかどうかは不明です。</p>
+
+<p>
+  とりあえず試してみたい、という方は
+  <%= link_to("\#ロビー", "/client?utf8=" + CGI.escape('#ロビー'), {"target" => "_blank"}) %>
+  にどうぞ。
+</p>
+
+<%= form :action => url(:action => "channel") do %>
+  <p>
+    <%= text_field :name => "channel", :value => '#', :size => 10,
+      :label => "チャンネル " %>
+    に <%= submit "移動" %> 。過去ログはこちらから。新しいチャンネルを作る場合もこちら。
+  </p>
+<% end =%>
+
+<p><%= link_to("最近入ったチャンネルに入室", "/client", {"target" => "_blank"}) %>。</p>
+
+<p>LimeChatなどのIRCクライアントを使う場合は、ホスト名 irc.gimite.net 、ポート番号 6667 、<b>文字コード UTF-8</b> で接続してください。</p>

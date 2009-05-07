@@ -1,0 +1,21 @@
+<h1><%= link_to("irc.gimite.net", "/") %> / #<%=h @channel %></h1>
+
+<h2>入室</h2>
+
+<p><%= link_to("今すぐ入室する", @client_url, {"target" => "_blank"}) %></p>
+
+<p>LimeChatなどのIRCクライアントを使う場合は、ホスト名 irc.gimite.net 、ポート番号 6667 、<b>文字コード UTF-8</b> で接続して、チャンネル #<%=h @channel %> に入ってください。</p>
+
+<h2>過去ログ</h2>
+
+<p>
+  <% if !@items.empty? %>
+    <% for item in @items %>
+      <%= link_to(item[:date].strftime("%Y/%m/%d"), item[:url]) %><br>
+    <% end %>
+  <% else %>
+    過去ログがありません。ログを取るには、<%= link_to("入室", @client_url) %>して
+    入力欄 (グレーの部分) の下にある [過去ログを取って公開] をクリックしてください。<br>
+    または、LimeChatなどのIRCクライアントを使って RDeborah をinviteしてください。
+  <% end %>
+</p>
