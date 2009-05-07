@@ -6,6 +6,12 @@
 
 <p>LimeChatなどのIRCクライアントを使う場合は、ホスト名 irc.gimite.net 、ポート番号 6667 、<b>文字コード UTF-8</b> で接続して、チャンネル #<%=h @channel %> に入ってください。</p>
 
+<h2>最近の会話</h2>
+
+<p id="recent"><br><br><br><br><br><br><br><br><br><br></p>
+
+<p>※20秒ごとに更新</p>
+
 <h2>過去ログ</h2>
 
 <p>
@@ -19,3 +25,20 @@
     または、LimeChatなどのIRCクライアントを使って RDeborah をinviteしてください。
   <% end %>
 </p>
+
+<script type="text/javascript">
+  
+  function updateRecent() {
+    var url = "<%=h @recent_url %>?nocache=" + new Date().getTime();
+    new Ajax.Updater("recent", url, {
+      method: "get",
+      onFailure: function(req) {
+        if (window.console) console.error(req);
+      }
+    });
+  }
+  
+  setInterval(updateRecent, 20000);
+  updateRecent();
+  
+</script>

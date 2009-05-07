@@ -1,0 +1,8 @@
+<% for message in @log %>
+  <% if message %>
+    <span class="time"><%=h message.time_str %></span>
+    <span class="from"><%=h message.from_str %></span>
+    <span class="<%=h message.body_class %>"><%=h message.body %></span>
+  <% end %>
+  <br>
+<% end %>

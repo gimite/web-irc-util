@@ -1,0 +1,17 @@
+Distributed under Artistic License.
+
+Authors:
+  Hiroshi Ichikawa <http://gimite.net/>:
+    Except below
+  NISHI Takao <zophos@koka-in.org> (Rica):
+    deborah/rica_gimite.rb
+  tateisu@juggler.jp (QuickIRC2):
+    www/app/views/home/client.html.erb
+    www/public/QI2Flash.swf
+    www/public/qi2.css
+    www/public/i/*
+    www/public/j/*
+  Sam Stephenson (prototype.js):
+    www/public/javascripts/prototype-1.6.0.3.js
+  John Resig (jQuery):
+    www/public/javascripts/jquery.js

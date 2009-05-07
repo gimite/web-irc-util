@@ -4,6 +4,7 @@ class Channel < Application
       @channel = CGI.unescape(channel)
       @title = "\##{@channel} - irc.gimite.net"
       @client_url = "/client?utf8=" + CGI.escape("\##{@channel}")
+      @recent_url = "/channel/%s/recent" % CGI.escape(@channel)
       date_strs = Dir[channel_dir(@channel) + "/*.txt"].
         map(){ |s| s.slice(/(\d+)\.txt/, 1) }.
         sort().reverse()
@@ -17,30 +18,50 @@ class Channel < Application
       render()
     end
     
-    def log(channel, date)
+    def archive(channel, date)
       @channel = CGI.unescape(channel)
-      @date_str = CGI.unescape(date)
-      @date = str_to_date(@date_str)
+      @date = str_to_date(CGI.unescape(date))
       @prev_date = @date - 1
-      @prev_date_url = log_url(@channel, @prev_date)
+      @prev_date_url = archive_url(@channel, @prev_date)
       @next_date = @date + 1
-      @next_date_url = @next_date > Date.today ? nil : log_url(@channel, @next_date)
+      @next_date_url = @next_date > Date.today ? nil : archive_url(@channel, @next_date)
       @title = "%s - \#%s - irc.gimite.net" % [@date.strftime("%Y/%m/%d"), @channel]
       @channel_url = "/channel/" + CGI.escape(@channel)
-      log_path = "%s/%s.txt" % [channel_dir(@channel), @date_str]
+      path = archive_path(@channel, @date)
       @log = []
-      if File.exist?(log_path)
-        File.foreach(log_path) do |line|
+      if File.exist?(path)
+        File.foreach(path) do |line|
           @log.push(IRCMessage.new(@channel, line))
         end
       end
       render()
     end
     
+    def recent(channel)
+      @channel = CGI.unescape(channel)
+      path = archive_path(@channel, Date.today)
+      if File.exist?(path)
+        @log =
+          File.readlines(path).
+          map(){ |s| IRCMessage.new(@channel, s) }.
+          select(){ |m| m.body }
+      else
+        @log = []
+      end
+      max_log = 10
+      pos = [0, @log.size - max_log].max
+      @log = (0...max_log).map(){ |i| @log[pos + i] }
+      render(:recent, :layout => false)
+    end
+    
   private
     
-    def log_url(channel, date)
+    def archive_url(channel, date)
       "/channel/%s/archive/%s" % [CGI.escape(channel), date_to_str(date)]
+    end
+    
+    def archive_path(channel, date)
+      return "%s/%s.txt" % [channel_dir(channel), date_to_str(date)]
     end
     
     def channel_dir(channel)

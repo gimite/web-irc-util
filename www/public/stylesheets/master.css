@@ -10,7 +10,7 @@ body {
 }
 html {
   height: 100%;
-  margin-bottom: 1px;
+  margin: 8px;
 }
 #container {
   width: 80%;
@@ -46,7 +46,7 @@ h1 {
   font-family: Arial, Verdana, sans-serif;
   font-weight: 300;
   margin-top: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 h2 {
   font-size: 15px;
@@ -54,6 +54,8 @@ h2 {
   font-family: Arial, Verdana, sans-serif;
   font-weight: 300;
   background-color: #fff;
+  margin-top: 16px;
+  margin-bottom: 5px;
 }
 h3 {
   color: #4d9b12;
@@ -85,7 +87,7 @@ p {
   color: #000;
   background-color: #fff;
   line-height: 20px;
-  padding: 5px;
+  padding: 3px;
 }
 a {
   color: #4d9b12;

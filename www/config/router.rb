@@ -36,7 +36,8 @@ Merb::Router.prepare do
   match('/').to(:controller => 'home', :action =>'index')
   match('/client').to(:controller => 'home', :action =>'client')
   match('/channel/:channel').to(:controller => 'channel', :action =>'index')
-  match('/channel/:channel/archive/:date').to(:controller => 'channel', :action =>'log')
+  match('/channel/:channel/archive/:date').to(:controller => 'channel', :action =>'archive')
+  match('/channel/:channel/recent').to(:controller => 'channel', :action =>'recent')
 
   # This is the default route for /:controller/:action/:id
   # This is fine for most cases.  If you're heavily using resource-based
