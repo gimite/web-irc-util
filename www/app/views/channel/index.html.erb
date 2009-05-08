@@ -1,5 +1,7 @@
 <h1><%= link_to("irc.gimite.net", "/") %> / #<%=h @channel %></h1>
 
+<div align="right"><%= link_to("Atom Feed", @atom_url) %></div>
+
 <h2>入室</h2>
 
 <p><%= link_to("今すぐ入室する", @client_url, {"target" => "_blank"}) %></p>
@@ -8,7 +10,7 @@
 
 <h2>最近の会話</h2>
 
-<p id="recent"><br><br><br><br><br><br><br><br><br><br></p>
+<p id="recent">ロード中...<br><br><br><br><br><br><br><br><br><br></p>
 
 <p>※20秒ごとに更新</p>
 

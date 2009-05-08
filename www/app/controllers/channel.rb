@@ -1,24 +1,33 @@
 class Channel < Application
     
-    def index(channel)
+    def index(channel, format = "html")
+      provides(:atom)
       @channel = CGI.unescape(channel)
       @title = "\##{@channel} - irc.gimite.net"
+      @atom_url = channel_url(@channel) + ".atom"
       @client_url = "/client?utf8=" + CGI.escape("\##{@channel}")
       @recent_url = "/channel/%s/recent" % CGI.escape(@channel)
-      date_strs = Dir[channel_dir(@channel) + "/*.txt"].
-        map(){ |s| s.slice(/(\d+)\.txt/, 1) }.
+      dates = Dir[channel_dir(@channel) + "/*.txt"].
+        map(){ |s| str_to_date(s.slice(/(\d+)\.txt/, 1)) }.
         sort().reverse()
+      if format == "atom"
+        dates.delete(Date.today)
+        dates = dates[0, 20]
+      end
       @items = []
-      for date_str in date_strs
+      for date in dates
         @items.push({
-          :date => str_to_date(date_str),
-          :url => "/channel/%s/archive/%s" % [CGI.escape(@channel), date_str],
+          :date => date,
+          :date_str => date_to_str(date),
+          :url => archive_url(@channel, date),
+          :log => format == "atom" ? load_log(@channel, date, true, 30) : nil,
         })
       end
       render()
     end
     
     def archive(channel, date)
+      provides(:txt)
       @channel = CGI.unescape(channel)
       @date = str_to_date(CGI.unescape(date))
       @prev_date = @date - 1
@@ -26,28 +35,15 @@ class Channel < Application
       @next_date = @date + 1
       @next_date_url = @next_date > Date.today ? nil : archive_url(@channel, @next_date)
       @title = "%s - \#%s - irc.gimite.net" % [@date.strftime("%Y/%m/%d"), @channel]
-      @channel_url = "/channel/" + CGI.escape(@channel)
-      path = archive_path(@channel, @date)
-      @log = []
-      if File.exist?(path)
-        File.foreach(path) do |line|
-          @log.push(IRCMessage.new(@channel, line))
-        end
-      end
+      @channel_url = channel_url(@channel)
+      @text_url = archive_url(@channel, @date) + ".txt"
+      @log = load_log(@channel, @date)
       render()
     end
     
     def recent(channel)
       @channel = CGI.unescape(channel)
-      path = archive_path(@channel, Date.today)
-      if File.exist?(path)
-        @log =
-          File.readlines(path).
-          map(){ |s| IRCMessage.new(@channel, s) }.
-          select(){ |m| m.body }
-      else
-        @log = []
-      end
+      @log = load_log(@channel, Date.today, true)
       max_log = 10
       pos = [0, @log.size - max_log].max
       @log = (0...max_log).map(){ |i| @log[pos + i] }
@@ -56,16 +52,35 @@ class Channel < Application
     
   private
     
+    def channel_url(channel)
+      return "/channel/" + CGI.escape(@channel)
+    end
+    
     def archive_url(channel, date)
       "/channel/%s/archive/%s" % [CGI.escape(channel), date_to_str(date)]
+    end
+    
+    def channel_dir(channel)
+      return "../deborah/gimite.net/log/%s" % CGI.escape("\##{@channel}")
     end
     
     def archive_path(channel, date)
       return "%s/%s.txt" % [channel_dir(channel), date_to_str(date)]
     end
     
-    def channel_dir(channel)
-      return "../deborah/gimite.net/log/%s" % CGI.escape("\##{@channel}")
+    def load_log(channel, date, skip_system = false, max_lines = 1.0/0.0)
+      path = archive_path(channel, date)
+      return [] if !File.exist?(path)
+      i = 0
+      log = []
+      File.foreach(path) do |line|
+        message = IRCMessage.new(channel, line)
+        next if skip_system && !message.body
+        log.push(message)
+        i += 1
+        break if i >= max_lines
+      end
+      return log
     end
     
     def date_to_str(date)
@@ -83,7 +98,8 @@ end
 class IRCMessage
     
     def initialize(channel, line)
-      (@time_str, @from, @command, *@args) = line.chomp().split(/\t/)
+      @raw_line = line.chomp()
+      (@time_str, @from, @command, *@args) = @raw_line.split(/\t/)
       case @command
         when "PRIVMSG"
           @from_str = "<#{@from}>"
@@ -114,6 +130,6 @@ class IRCMessage
       end
     end
     
-    attr_reader(:time_str, :from_str, :body, :message, :body_class)
+    attr_reader(:raw_line, :time_str, :from_str, :body, :message, :body_class)
     
 end

@@ -17,6 +17,8 @@ end
  
 Merb::BootLoader.before_app_loads do
   # This will get executed after dependencies have been loaded but before your app's classes have loaded.
+  Merb.add_mime_type(:txt, nil, %w(text/plain), :charset => "utf-8")
+  Merb.add_mime_type(:atom, :to_atom, %w[application/atom+xml])
 end
  
 Merb::BootLoader.after_app_loads do

@@ -4,6 +4,8 @@
   <%=h @date.strftime("%Y/%m/%d") %>
 </h1>
 
+<div align="right"><%= link_to("テキスト形式", @text_url) %></div>
+
 <p>
   <%= link_to("« " + @prev_date.strftime("%Y/%m/%d"), @prev_date_url) %>
   &nbsp;&nbsp;&nbsp;&nbsp;
