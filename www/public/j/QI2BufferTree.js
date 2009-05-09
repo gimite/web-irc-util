@@ -764,6 +764,19 @@ function BufferTreeNode_Conn(sortkey,name,buffer_inner){
 		self.say("接続バッファに発言することはできません");
 		return false;
 	}
+	
+	self.changeMyNick = function(nick){
+    self.config_form.nick.value = nick;
+    AppNode.saveSettings();
+    if (nick != self.mynick){
+      self.conn.send("NICK :"+ nick);
+    }
+  }
+
+  self.onMyNickChanged = function(nick){
+    self.mynick = nick;
+    if (nick != $('taNick').value) $('taNick').value = nick;
+  }
 
 	// 設定保存
 	self.saveSettings = function(next){
@@ -878,23 +891,28 @@ function BufferTreeNode_Conn(sortkey,name,buffer_inner){
 		case "433":
 			// :juggler.jp 433 * tateQI2 :Nickname is already in use.
 			var nick = self.config_form.nick.value;
-			if(nick.length>7) nick=nick.substr(0,7);
-			var last = "\\ _ - [ ] { }".split(" ");
-			nick += last[nrand(last.length)];
-			nick += last[nrand(last.length)];
+			self.nickSuffix = self.nickSuffix ? self.nickSuffix + 1 : 1;
+			var suffixLen = self.nickSuffix.toString().length;
+			if (nick.length + suffixLen > 9){
+        nick = nick.substr(0, 9 - suffixLen);
+      }
+      nick += self.nickSuffix;
 			self.conn.send("NICK :"+ nick);
 			break;
 		case "464": // ERR_PASSWDMISMATCH ":Password incorrect"
 		case "431": // ERR_NONICKNAMEGIVEN ":No nickname given"
-		case "432": // ERR_ERRONEUSNICKNAME "<nick> :Erroneous nickname"
 		case "463": // ERR_NOPERMFORHOST ":Your host isn't among the privileged"
 			// 認証エラー、切断する
 			self.conn.stop();
 			break;
 
+		case "432": // ERR_ERRONEUSNICKNAME "<nick> :Erroneous nickname"
+		  say("このニックネームは使えません。ニックネームは半角英数字9文字以下にしてください。");
+		  $('taNick').value = self.mynick;
+		  break;
 
 		case "001":
-			self.mynick = msg.args[0];
+			self.onMyNickChanged(msg.args[0]);
 			self.playSound("OnConnect");
 
 			break;
@@ -924,7 +942,7 @@ function BufferTreeNode_Conn(sortkey,name,buffer_inner){
 				}
 			}
 			// 自分のニックネームを更新する
-			if( prefix.isSameNick( self.mynick ) ) self.mynick = msg.args[0];
+			if( prefix.isSameNick( self.mynick ) ) self.onMyNickChanged(msg.args[0]);
 			break;
 		case "PART": // チャンネルから退出
 			//:tateSV3!~ProbooBcQw@155.163.192.61.tokyo.global.alpha-net.ne.jp PART !WG1HKじゃばすくりぷと :so long
@@ -1343,7 +1361,11 @@ function BufferTreeNode_Channel(nameinfo,conn_node){
 		}
 		return true;
 	}
-
+	
+	self.changeMyNick = function(nick){
+    self.parent.changeMyNick(nick);
+  }
+  
 	// 設定保存
 	self.saveSettings = function(next){
 		saveCookie( (next++),{

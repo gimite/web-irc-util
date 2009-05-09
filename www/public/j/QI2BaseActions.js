@@ -49,6 +49,15 @@ function endInput(type){
 	$('taInput').value = "";
 }
 
+function onNickAreaChanged(){
+	var node = getSelectedNode();
+  if (node.changeMyNick){
+    var nick = $('taNick').value;
+    if (nick == "") nick = generateRandomNick();
+    node.changeMyNick(nick);
+  }
+}
+
 function initInputPane(){
 	var input = $('taInput');
 	input.value = "";

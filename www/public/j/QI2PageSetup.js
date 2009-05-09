@@ -44,9 +44,12 @@ function PageSetup(){
 					// バッファを置くDIV
 					,70,new SimplePane('BufferContainer'   ,null,null ,3 ,17  ,(uai.trident?8:0) ,15)
 					// テキスト入力部 
-					,0 ,new SimplePane('taInput'           ,null,60   ,2  ,17 ,(uai.trident?4:0) ,15)
+					,0 ,new WeightPane('InputBoxPane',true
+					  ,0,new SimplePane('taNick'           ,100,32   ,2  ,2 ,(uai.trident?4:0) ,15)
+					  ,100,new SimplePane('taInput'           ,null,32   ,2  ,17 ,(uai.trident?4:0) ,2)
+					)
 					// ボタンの類
-					,0 ,new SimplePane('InputPane'         ,null,32   ,2  ,17+4 ,5,48) 
+					,0 ,new SimplePane('InputPane'         ,null,32   ,2  ,17+4 ,5,15) 
 				)
 				,new FramePane("BGFrame","i/bg_mona",".gif",14,19,36,48,true)
 			)

@@ -120,6 +120,21 @@ div.memberrow_on,div.bufferrow_on{
 	padding:0;
 }
 
+#taNick{
+	display:block;
+	position: absolute;
+	z-index:10;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	overflow:auto;
+	margin:0;
+	padding:0;
+	background-color: #FFFFFF;
+	border: 1px solid black ;
+	font-size: 12pt;
+	line-height: 1.2;
+}
+
 #taInput{
 	display:block;
 	position: absolute;
@@ -129,7 +144,7 @@ div.memberrow_on,div.bufferrow_on{
 	overflow:auto;
 	margin:0;
 	padding:0;
-	background-color: #EFEFEF;
+	background-color: #FFFFFF;
 	border: 1px solid black ;
 	font-size: 12pt;
 	line-height: 1.2;

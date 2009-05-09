@@ -47,19 +47,19 @@
 <div id="BufferContainer"></div>
 
 <!-- 発言入力部 -->
+<input type="text" id="taNick" onchange="onNickAreaChanged()">
 <textarea id="taInput" wrap=off></textarea>
 <!-- その他入力補助 -->
 <div id="InputPane">
 	<table class="InputPaneTable">
 	<tr>
-		<td nowrap style="vertical-align:top">↑グレーの部分に発言を入力してEnterキーを押してください。</td>
+		<td nowrap style="vertical-align:top">上のボックスに発言を入力してEnterキーを押してください。</td>
 		<td nowrap ALIGN="right">
 			<input type="button" class="btnSend" value="発言"     onClick="endInput(1)">
 			<input type="button" class="btnSend" value="Notice"   onClick="endInput(2)">
 			<input type="button" class="btnSend" value="Action"   onClick="endInput(3)">
 			<input type="button" class="btnSend" value="トピックを設定"
 				onClick="endInput(4)">
-			<!-- <input type="button" class="btnSend" value="全CH"     onClick="endInput(5)"> -->
 			<input type="button" class="btnSend" value="過去ログ" onClick="actArchive()">
 			<input type="button" class="btnSend" value="過去ログを取って公開"
 				onClick="actInviteLogger()">
@@ -77,8 +77,6 @@
 <!-- 全ログフッタ -->
 <div id="AllLogFooter">
 	<div id="version">
-		<A href="#" onclick="actConnSetting();return false;">ニックネーム変更</a> 
-		<!-- <A href="#" onclick="actSelectChanneList();return false;">チャンネル一覧</a>  -->
 		<A href="#" onclick="actAppSetting();return false;">文字サイズ変更,サウンド設定</a> 
 		　//　
 		Based on <A target="_blank" href="http://irc.juggler.jp/qi2/doc/qi2readme.html">QuickIRC2</a> version 2.0.0
