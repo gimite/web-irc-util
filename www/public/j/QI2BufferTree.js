@@ -5,6 +5,8 @@
   現在の選択状態
 */
 
+var MAX_NICK_LEN = 40;
+
 // バッファ一覧リストボックス
 var lbBuffer = null;
 
@@ -708,8 +710,10 @@ function BufferTreeNode_Conn(sortkey,name,buffer_inner){
     if( self.config_form.nick.value.length == 0){
       nick = self.config_form.nick.value = generateRandomNick();
     }
-    if(! nick.match(/^[A-Z\[\]\`\\\_\^\|\}\{][\\A-Z\[\]\`\_\^\|0-9\-\}\{]{0,8}$/i )){
-      self.say("ニックネームの指定を確認してください");
+    if(!nick.match(/^[A-Z\[\]\`\\\_\^\|\}\{][\\A-Z\[\]\`\_\^\|0-9\-\}\{]*$/i) ||
+       nick.length > MAX_NICK_LEN){
+      self.say("このニックネームは使えません。ニックネームは半角英数字" + MAX_NICK_LEN +
+        "文字以下にしてください。");
       return;
     }
 
@@ -893,8 +897,8 @@ function BufferTreeNode_Conn(sortkey,name,buffer_inner){
       var nick = self.config_form.nick.value;
       self.nickSuffix = self.nickSuffix ? self.nickSuffix + 1 : 1;
       var suffixLen = self.nickSuffix.toString().length;
-      if (nick.length + suffixLen > 9){
-        nick = nick.substr(0, 9 - suffixLen);
+      if (nick.length + suffixLen > MAX_NICK_LEN){
+        nick = nick.substr(0, MAX_NICK_LEN - suffixLen);
       }
       nick += self.nickSuffix;
       self.conn.send("NICK :"+ nick);
@@ -907,7 +911,8 @@ function BufferTreeNode_Conn(sortkey,name,buffer_inner){
       break;
 
     case "432": // ERR_ERRONEUSNICKNAME "<nick> :Erroneous nickname"
-      say("このニックネームは使えません。ニックネームは半角英数字9文字以下にしてください。");
+      say("このニックネームは使えません。ニックネームは半角英数字" + MAX_NICK_LEN +
+        "文字以下にしてください。");
       $('taNick').value = self.mynick;
       break;
 
