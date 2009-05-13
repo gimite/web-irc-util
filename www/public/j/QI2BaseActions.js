@@ -54,7 +54,11 @@ function onNickAreaChanged(){
   if (node.changeMyNick){
     var nick = $('taNick').value;
     if (nick == "") nick = generateRandomNick();
-    node.changeMyNick(nick);
+    if (validateNick(nick)){
+      node.changeMyNick(nick);
+    }else{
+      $('taNick').value = node.getMyNick();
+    }
   }
 }
 

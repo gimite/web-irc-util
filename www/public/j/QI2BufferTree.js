@@ -218,7 +218,18 @@ function localEcho(cmd,node,line,bNoAllLog){
   if(!bNoAllLog) MessageFormat_AllLog.procLog(logparam,logAll);
 }
 
-function generateRandomNick() {
+function validateNick(nick){
+  if(!nick.match(/^[A-Z\[\]\`\\\_\^\|\}\{][\\A-Z\[\]\`\_\^\|0-9\-\}\{]*$/i) ||
+     nick.length > MAX_NICK_LEN || nick.length == 0){
+    alert("このニックネームは使えません。ニックネームは半角アルファベット" + MAX_NICK_LEN +
+      "文字以下にしてください。");
+    return false;
+  }else{
+    return true;
+  }
+}
+
+function generateRandomNick(){
   return "guest-" + nrand(1000);
 }
 
@@ -710,12 +721,7 @@ function BufferTreeNode_Conn(sortkey,name,buffer_inner){
     if( self.config_form.nick.value.length == 0){
       nick = self.config_form.nick.value = generateRandomNick();
     }
-    if(!nick.match(/^[A-Z\[\]\`\\\_\^\|\}\{][\\A-Z\[\]\`\_\^\|0-9\-\}\{]*$/i) ||
-       nick.length > MAX_NICK_LEN){
-      self.say("このニックネームは使えません。ニックネームは半角英数字" + MAX_NICK_LEN +
-        "文字以下にしてください。");
-      return;
-    }
+    if (!validateNick(nick)) return;
 
     // 可能なら設定を保存
     AppNode.saveSettings();
@@ -775,6 +781,10 @@ function BufferTreeNode_Conn(sortkey,name,buffer_inner){
     if (nick != self.mynick){
       self.conn.send("NICK :"+ nick);
     }
+  }
+
+  self.getMyNick = function(){
+    return self.mynick;
   }
 
   self.onMyNickChanged = function(nick){
@@ -911,8 +921,6 @@ function BufferTreeNode_Conn(sortkey,name,buffer_inner){
       break;
 
     case "432": // ERR_ERRONEUSNICKNAME "<nick> :Erroneous nickname"
-      say("このニックネームは使えません。ニックネームは半角英数字" + MAX_NICK_LEN +
-        "文字以下にしてください。");
       $('taNick').value = self.mynick;
       break;
 
@@ -1369,6 +1377,10 @@ function BufferTreeNode_Channel(nameinfo,conn_node){
   
   self.changeMyNick = function(nick){
     self.parent.changeMyNick(nick);
+  }
+  
+  self.getMyNick = function(){
+    return self.parent.getMyNick();
   }
   
   // 設定保存
