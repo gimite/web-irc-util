@@ -219,10 +219,14 @@ function localEcho(cmd,node,line,bNoAllLog){
 }
 
 function validateNick(nick){
-  if(!nick.match(/^[A-Z\[\]\`\\\_\^\|\}\{][\\A-Z\[\]\`\_\^\|0-9\-\}\{]*$/i) ||
-     nick.length > MAX_NICK_LEN || nick.length == 0){
-    alert("このニックネームは使えません。ニックネームは半角アルファベット" + MAX_NICK_LEN +
-      "文字以下にしてください。");
+  if(nick.length == 0){
+    alert("ニックネームを入力してください。");
+    return false;
+  }else if(!nick.match(/^[\\A-Z\u0080-\uffff\[\]\`\_\^\|0-9\-\}\{]+$/i)){
+    alert("ニックネームに使えない記号が入っています。");
+    return false;
+  }else if(nick.match(/^[0-9]/)){
+    alert("ニックネームの先頭に数字は使えません。");
     return false;
   }else{
     return true;
