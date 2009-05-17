@@ -929,6 +929,7 @@ function BufferTreeNode_Conn(sortkey,name,buffer_inner){
       break;
 
     case "001":
+      self.conn.send("MODE " + msg.args[0] + " +h");  // Hides host name
       self.onMyNickChanged(msg.args[0]);
       self.playSound("OnConnect");
 
