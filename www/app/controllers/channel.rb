@@ -1,3 +1,6 @@
+#require "uri"
+
+
 class Channel < Application
     
     def index(channel, format = "html")
@@ -97,6 +100,8 @@ end
 
 class IRCMessage
     
+    include Merb::AssetsMixin
+
     def initialize(channel, line)
       @raw_line = line.chomp()
       (@time_str, @from, @command, *@args) = @raw_line.split(/\t/)
@@ -131,5 +136,21 @@ class IRCMessage
     end
     
     attr_reader(:raw_line, :time_str, :from_str, :body, :message, :body_class)
+
+    def body_html
+      return nil if !@body
+      e = Regexp.new(%w(/ & =).map(){ |s| CGI.escape(s) }.join("|"), Regexp::IGNORECASE)
+      pos = 0
+      result = ""
+      @body.gsub(URI.regexp("http")) do
+        m = Regexp.last_match
+        result << CGI.escapeHTML(@body[pos...m.begin(0)])
+        url = $&
+        result << link_to(CGI.unescape(url.gsub(e){ CGI.escape($&) }), url, {"target" => "_blank"})
+        pos = m.end(0)
+      end
+      result << CGI.escapeHTML(@body[pos..-1])
+      return result
+    end
     
 end

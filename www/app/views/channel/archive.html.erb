@@ -19,7 +19,7 @@
   <span class="time"><%=h message.time_str %></span>
   <% if message.body %>
     <span class="from"><%=h message.from_str %></span>
-    <span class="<%=h message.body_class %>"><%=h message.body %></span>
+    <span class="<%=h message.body_class %>"><%= message.body_html %></span>
   <% else %>
     <span class="message"><%=h message.message %></span>
   <% end %>
