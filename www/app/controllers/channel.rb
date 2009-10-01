@@ -102,10 +102,11 @@ class IRCMessage
     
     include Merb::AssetsMixin
     
+    # Right-to-left override, etc. Removes them to avoid corrupted log rendering.
     UNSAFE_CHARS = /\xE2\x80\x8E|\xE2\x80\x8F|\xE2\x80\xAA|\xE2\x80\xAB|\xE2\x80\xAC|\xE2\x80\xAD|\xE2\x80\xAE/
     
     def initialize(channel, line)
-      @raw_line = line.chomp()
+      @raw_line = line.chomp().gsub(UNSAFE_CHARS, "")
       (@time_str, @from, @command, *@args) = @raw_line.split(/\t/)
       case @command
         when "PRIVMSG"
@@ -141,18 +142,17 @@ class IRCMessage
 
     def body_html
       return nil if !@body
-      safe_body = @body.gsub(UNSAFE_CHARS, "")
       e = Regexp.new(%w(/ & =).map(){ |s| CGI.escape(s) }.join("|"), Regexp::IGNORECASE)
       pos = 0
       result = ""
-      safe_body.gsub(URI.regexp("http")) do
+      @body.gsub(URI.regexp("http")) do
         m = Regexp.last_match
-        result << CGI.escapeHTML(safe_body[pos...m.begin(0)])
+        result << CGI.escapeHTML(@body[pos...m.begin(0)])
         url = $&
         result << link_to(CGI.unescape(url.gsub(e){ CGI.escape($&) }), url, {"target" => "_blank"})
         pos = m.end(0)
       end
-      result << CGI.escapeHTML(safe_body[pos..-1])
+      result << CGI.escapeHTML(@body[pos..-1])
       return result
     end
     
