@@ -1,11 +1,8 @@
-#require "uri"
-
-
 class Channel < Application
     
     def index(channel, format = "html")
       provides(:atom)
-      @channel = CGI.unescape(channel)
+      @channel = CGI.unescape(channel).downcase
       @title = "\##{@channel} - irc.gimite.net"
       @atom_url = channel_url(@channel) + ".atom"
       @client_url = "/client?utf8=" + CGI.escape("\##{@channel}")
@@ -31,7 +28,7 @@ class Channel < Application
     
     def archive(channel, date)
       provides(:txt)
-      @channel = CGI.unescape(channel)
+      @channel = CGI.unescape(channel).downcase
       @date = str_to_date(CGI.unescape(date))
       @prev_date = @date - 1
       @prev_date_url = archive_url(@channel, @prev_date)
