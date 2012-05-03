@@ -52,6 +52,7 @@ class Deborah < Rica::MessageProcessor
       $stderr.puts("Error: missing channel: %p", msg)
       return
     end
+    return if !(channel =~ /\A\#/)
     channel = channel.downcase
     today = Date.today
     if today != @file_date

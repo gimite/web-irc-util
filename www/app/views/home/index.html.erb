@@ -2,27 +2,34 @@
 
 <h1>irc.gimite.net</h1>
 
-<p>irc.gimite.net はIRCサーバ + Web上で動くIRCクライアント (<a href="http://irc.juggler.jp/qi2/doc/qi2readme.html" target="_blank">QuickIRC2</a>) + 過去ログサーバ です。現在試験運用中です。チャンネルを適当に作ってご自由にお使いください。</p>
+<p>irc.gimite.net はWebチャットサービスです。LimeChatなどのIRCクライアントからも接続できます。過去ログも残せます。チャンネル(チャットルーム)を適当に作ってご自由にお使いください。</p>
+
+<p>&nbsp;</p>
 
 <p>
-  とりあえず試してみたい、という方は
   <%= link_to("\#ロビー", "/client?utf8=" + CGI.escape('#ロビー'), {"target" => "_blank"}) %>
   (<%= link_to("過去ログ", "/channel/" + CGI.escape("ロビー")) %>)
-  にどうぞ。
+  (とりあえず試してみたいという人はこちら。)
 </p>
 
 <%= form :action => url(:action => "channel") do %>
   <p>
     <%= text_field :name => "channel", :value => '#', :size => 10,
       :label => "チャンネル " %>
-    に <%= submit "移動" %> 。過去ログはこちらから。新しいチャンネルを作る場合もこちら。
+    に <%= submit "移動" %>
+    (過去ログはこちらから。新しいチャンネルを作る場合もこちら。)
   </p>
 <% end =%>
 
-<p><%= link_to("最近入ったチャンネルに入室", "/client", {"target" => "_blank"}) %>。</p>
-
-<p>LimeChatなどのIRCクライアントを使う場合は、ホスト名 irc.gimite.net 、ポート番号 6667 、<b>文字コード UTF-8</b> で接続してください。</p>
+<p><%= link_to("最近入ったチャンネルに入室", "/client", {"target" => "_blank"}) %></p>
 
 <p>&nbsp;</p>
 
-<p><a href="http://d.hatena.ne.jp/Gimite/20090509" target="_blank">紹介ブログ記事はこちら</a>。<a href="http://github.com/gimite/web-irc-util/tree/master" target="_blank">システムのソースコードはこちら</a>。</p>
+<ul>
+  <li>LimeChatなどのIRCクライアントを使う場合は、ホスト名 irc.gimite.net 、ポート番号 6667 、<b>文字コード UTF-8</b> で接続してください。</li>
+  <li>過去ログを削除する機能はありません。個人情報など、どうしても消したい場合は<img src="http://gimite.net/images/etc/gmail.png">にメールしてください。</li>
+  <li><a href="http://d.hatena.ne.jp/Gimite/20090509" target="_blank">紹介ブログ記事</a></li>
+  <li><a href="http://github.com/gimite/web-irc-util/tree/master" target="_blank">システムのソースコード</a></li>
+</ul>
+
+<p align="right">Created by <a href="http://gimite.net/">Gimite</a></p>

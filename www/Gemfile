@@ -1,0 +1,7 @@
+source "http://rubygems.org"
+gem "merb"
+gem "dm-sweatshop"
+gem "merb-builder"
+gem "merb_full_url"
+gem "dm-sqlite-adapter"
+gem "mongrel"

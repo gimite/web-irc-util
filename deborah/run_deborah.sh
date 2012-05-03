@@ -2,6 +2,6 @@
 
 while true
 do
-  ruby deborah.rb gimite.net
+  ruby1.8 deborah.rb gimite.net
   sleep 60
 done
